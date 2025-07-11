@@ -489,15 +489,3 @@ This provides:
 - Try-it-out capabilities
 
 For a complete example, see `examples/with_openapi.rs`.
-
-## Migration from Session-Based to User-Based Storage
-
-If upgrading from a session-based storage implementation, you need to:
-
-1. Update your storage implementation to use the new trait methods
-2. Change from `session_id` primary keys to `user_id` primary keys
-3. Store sessions as arrays within user records
-4. Update refresh token generation to include `user_id`
-5. Modify logout handlers to specify which session to revoke
-
-The library maintains backward compatibility for the JWT token structure while providing the new user-based storage capabilities.
