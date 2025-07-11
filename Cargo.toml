@@ -1,0 +1,57 @@
+[package]
+name = "axum-jwt-sessions"
+version = "0.1.0"
+edition = "2024"
+authors = ["DreamingCodes <dev@dreaming.codes>"]
+description = "JWT authentication library for Axum with refresh token support"
+license = "MIT"
+repository = "https://github.com/Dreaming-Codes/axum-jwt-sessions"
+keywords = ["axum", "jwt", "auth", "authentication", "session"]
+categories = ["web-programming", "authentication"]
+
+[features]
+default = []
+openapi = ["dep:utoipa"]
+
+[[example]]
+name = "basic_usage"
+path = "examples/basic_usage.rs"
+
+[[example]]
+name = "advanced_usage"
+path = "examples/advanced_usage.rs"
+
+[[example]]
+name = "with_middleware"
+path = "examples/with_middleware.rs"
+
+[[example]]
+name = "secure_paths"
+path = "examples/secure_paths.rs"
+
+[[example]]
+name = "with_openapi"
+path = "examples/with_openapi.rs"
+required-features = ["openapi"]
+
+[dependencies]
+axum = "0.8.4"
+
+jsonwebtoken = "9.3.1"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+thiserror = "2.0.12"
+time = { version = "0.3", features = ["serde"] }
+uuid = { version = "1.17.0", features = ["v4", "serde"] }
+
+# OpenAPI support
+utoipa = { version = "5.3", features = [
+    "axum_extras",
+    "time",
+    "uuid",
+], optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.46.1", features = ["full"] }
+utoipa-scalar = { version = "0.3", features = ["axum"] }
+utoipa-axum = "0.2"
