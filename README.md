@@ -13,12 +13,16 @@ A flexible JWT authentication library for Axum with refresh token support and us
 - **Session extractors** for both required and optional authentication
 - **Type-safe session data** with user-defined types
 - **Secure refresh token paths** with automatic subject verification
+- **Cloudflare Workers KV integration** - Built-in support for serverless session storage
 
 ## Installation
 
 ```toml
 [dependencies]
 axum-jwt-sessions = "0.1.0"
+
+# For Cloudflare Workers KV support
+axum-jwt-sessions = { version = "0.1.0", features = ["cloudflare-kv"] }
 ```
 
 ## Quick Start
@@ -290,6 +294,53 @@ See the `examples/` directory for complete working examples:
 - `with_middleware.rs` - Using authentication middleware
 - `secure_paths.rs` - Implementing high-security endpoints with refresh token requirements
 - `with_openapi.rs` - OpenAPI documentation with utoipa and Scalar UI
+
+## Cloudflare Workers KV Integration
+
+The library provides built-in support for Cloudflare Workers KV as a session storage backend, perfect for serverless applications.
+
+### Setup
+
+Enable the `cloudflare-kv` feature:
+
+```toml
+[dependencies]
+axum-jwt-sessions = { version = "0.1", features = ["cloudflare-kv"] }
+worker = "0.6"
+```
+
+### Usage
+
+```rust
+use axum_jwt_sessions::{CloudflareKvStorage, prelude::*};
+use worker::kv::KvStore;
+
+// In your Cloudflare Worker
+#[event(fetch)]
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+    // Get your KV namespace
+    let kv = env.kv("SESSION_STORAGE")?;
+
+    // Create the storage instance
+    let storage = CloudflareKvStorage::new(kv);
+
+    // Configure and use with AuthState
+    let auth_state = AuthState::new(jwt_config, Arc::new(storage));
+
+    // Use with your Axum application
+    Ok(Response::ok("Success")?)
+}
+```
+
+### Features
+
+- **Global distribution** - Sessions replicated across Cloudflare's edge network
+- **High availability** - Built-in redundancy and fault tolerance
+- **Automatic cleanup** - Expired sessions are filtered automatically
+- **Custom key prefixes** - Organize sessions with custom prefixes
+- **Cost optimization** - Empty session arrays are cleaned up automatically
+
+For detailed setup instructions and configuration options, see [docs/cloudflare-kv.md](docs/cloudflare-kv.md).
 
 ## OpenAPI Documentation Support
 

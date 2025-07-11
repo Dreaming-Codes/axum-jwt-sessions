@@ -2,8 +2,14 @@ use crate::error::Result;
 use time::OffsetDateTime;
 use uuid::Uuid;
 
+#[cfg(feature = "cloudflare-kv")]
+pub mod cloudflare_kv;
+
+#[cfg(feature = "cloudflare-kv")]
+pub use cloudflare_kv::CloudflareKvStorage;
+
 /// Data structure representing a session within a user's session array
-#[derive(Debug, Clone, serde::Serialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 pub struct SessionData {
     pub session_id: Uuid,

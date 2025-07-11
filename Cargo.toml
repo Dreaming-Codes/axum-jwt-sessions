@@ -12,6 +12,7 @@ categories = ["web-programming", "authentication"]
 [features]
 default = []
 openapi = ["dep:utoipa"]
+cloudflare-kv = ["dep:worker"]
 
 [[example]]
 name = "basic_usage"
@@ -34,6 +35,11 @@ name = "with_openapi"
 path = "examples/with_openapi.rs"
 required-features = ["openapi"]
 
+[[example]]
+name = "cloudflare_kv_usage"
+path = "examples/cloudflare_kv_usage.rs"
+required-features = ["cloudflare-kv"]
+
 [dependencies]
 axum = "0.8.4"
 
@@ -50,6 +56,9 @@ utoipa = { version = "5.3", features = [
     "time",
     "uuid",
 ], optional = true }
+
+# Cloudflare Workers KV support
+worker = { version = "0.6", optional = true }
 
 [dev-dependencies]
 tokio = { version = "1.46.1", features = ["full"] }
