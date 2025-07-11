@@ -347,7 +347,6 @@ async fn login(/* ... */) -> Result<Json<LoginResponse>> {
 // Create the base OpenAPI documentation
 #[derive(OpenApi)]
 #[openapi(
-    components(schemas(LoginRequest, LoginResponse, UserSession)),
     modifiers(&JwtSecurityScheme),
     tags(
         (name = "auth", description = "Authentication endpoints")
